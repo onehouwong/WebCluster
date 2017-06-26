@@ -27,7 +27,7 @@ public class TextAnalyzer {
 			String webcontext2 = webcontext.substring(3001, webcontext.length());
 			terms = getTerms(webcontext1, terms);
 			terms = getTerms(webcontext2, terms);
-			System.out.println(terms.toString());
+			//System.out.println(terms.toString());
 		}
 		else
 			terms = getTerms(webcontext, terms);
