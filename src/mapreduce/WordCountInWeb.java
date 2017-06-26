@@ -26,8 +26,8 @@ import util.TextAnalyzer;
 import util.TextTransformer;
 
 public class WordCountInWeb extends Configured implements Tool{
-	private static final String INPUT_PATH = "hdfs://119.29.90.226:9000/user/hadoop/webinput";
-	private static final String OUTPUT_PATH = "hdfs://119.29.90.226:9000/user/hadoop/tmp/wordcountinweb";
+	private static final String INPUT_PATH = "hdfs://localhost:9000/user/hadoop/webinput";
+	private static final String OUTPUT_PATH = "hdfs://localhost:9000/user/hadoop/tmp/wordcountinweb";
 	
 	// (key, webtext) - (key@word, 1)
 	public static class WordCountInWebMapper extends Mapper<LongWritable, Text, Text, IntWritable>{
@@ -37,9 +37,7 @@ public class WordCountInWeb extends Configured implements Tool{
 		
 		@Override
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException{
-			String line=new String(value.getBytes(),0,value.getLength(),"GBK");
 			String webcontext = TextExtractor.extract(value.toString());
-			System.out.println(webcontext);
 			List<String> token = TextAnalyzer.splitText(webcontext);
 			for(String word : token){
 				text.set(word + "@" + key);
@@ -65,7 +63,7 @@ public class WordCountInWeb extends Configured implements Tool{
 		Configuration conf = getConf();
 		Job job = new Job(conf, "Word count in web");
 		job.setJarByClass(WordCountInWeb.class);
-		job.setInputFormatClass(TextInputFormat.class);
+		job.setInputFormatClass(SequenceFileInputFormat.class);
 		job.setMapperClass(WordCountInWebMapper.class);
 		job.setCombinerClass(WordCountInWebReducer.class);
 		job.setReducerClass(WordCountInWebReducer.class);
