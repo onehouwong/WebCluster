@@ -23,10 +23,13 @@ public class TextAnalyzer {
 		// too long, cut it into half and process each of them
 		if(webcontext.length() > 3000)
 		{
-			String webcontext1 = webcontext.substring(0, 3000);
-			String webcontext2 = webcontext.substring(3001, webcontext.length());
-			terms = getTerms(webcontext1, terms);
-			terms = getTerms(webcontext2, terms);
+			List<String> webcontexts = new ArrayList<String>();
+			for(int i=0;i<=webcontext.length()/3000;++i){
+				int temp = i*3000+3000;
+				int end = (temp > webcontext.length() ? webcontext.length(): temp);
+				webcontexts.add(webcontext.substring(i*3000, end));
+				terms = getTerms(webcontexts.get(i), terms);
+			}
 			//System.out.println(terms.toString());
 		}
 		else
